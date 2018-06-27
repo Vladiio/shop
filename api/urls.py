@@ -1,22 +1,14 @@
 from django.urls import path, re_path, include
-from django.contrib.auth.models import User
 
 from rest_framework import serializers, routers, viewsets
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username')
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+from books import views as books_views
+from api import views as api_views
 
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+router.register(r'users', api_views.UserViewSet)
+router.register(r'books', books_views.BookViewSet)
+router.register(r'authors', books_views.AuthorViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
