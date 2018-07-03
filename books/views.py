@@ -5,7 +5,6 @@ from rest_framework import generics, mixins, viewsets, pagination
 from . import serializers, models
 
 
-
 class BookViewSet(
     viewsets.GenericViewSet,
     mixins.CreateModelMixin,
@@ -17,6 +16,13 @@ class BookViewSet(
     lookup_field = 'slug'
     pagination_class = pagination.CursorPagination
     page_size = 100
+
+    def get_queryset(self):
+        books_qs = self.queryset
+        filterPhrase = self.request.GET.get('filter')
+        if filterPhrase:
+            books_qs = books_qs.filter(title__icontains=filterPhrase)
+        return books_qs
 
 
 class AuthorViewSet(
