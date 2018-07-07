@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins, viewsets, pagination
+from rest_framework import generics, mixins, viewsets, pagination, permissions
 # from rest_framework import mixins
 # from rest_framework import viewsets
 
@@ -11,6 +11,7 @@ class BookViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin
 ):
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = serializers.BookModelSerializer
     queryset = models.Book.objects.all()
     lookup_field = 'slug'
@@ -27,7 +28,7 @@ class BookViewSet(
 
 class AuthorViewSet(
     viewsets.GenericViewSet,
-    mixins.RetrieveModelMixin
+    mixins.RetrieveModelMixin,
 ):
     serializer_class = serializers.AuthorModelSerializer
     queryset = models.Author.objects.all()
